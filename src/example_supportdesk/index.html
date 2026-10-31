@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Example Support Desk · Cutback walkthrough</title>
+  <style>
+    :root{color-scheme:light;font-family:system-ui,sans-serif;color:#172723;background:#f6f7f3;line-height:1.5}
+    *{box-sizing:border-box}body{margin:0}main{max-width:1080px;margin:auto;padding:40px 24px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid #bbc7bf;padding-bottom:24px}
+    .eyebrow{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#385d4e}
+    h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1;margin:8px 0 12px;letter-spacing:-.04em}h2{font-size:1.1rem;margin:0 0 14px}
+    p{max-width:70ch}a{color:#174d3a}.pill{border:1px solid #a9beb1;border-radius:30px;padding:6px 12px;white-space:nowrap;font-size:.85rem}
+    .notice{border-left:3px solid #517460;padding:4px 16px;margin:26px 0;color:#385448}
+    .workspace{display:grid;grid-template-columns:280px 1fr;gap:36px;margin-top:36px}
+    .samples{display:grid;gap:10px}.sample{text-align:left;background:white;color:inherit;border:1px solid #b4c2b8;padding:14px;border-radius:6px;font:inherit;cursor:pointer}
+    .sample strong{display:block;font-size:.9rem}.sample span{font-size:.82rem;color:#40594d}
+    label{display:block;font-weight:600;margin-bottom:8px}textarea{width:100%;min-height:160px;resize:vertical;font:inherit;padding:16px;border:1px solid #728d7e;border-radius:6px;background:white;color:inherit}
+    button[type=submit]{margin-top:12px;background:#174d3a;color:white;border:0;border-radius:5px;padding:12px 20px;font:inherit;cursor:pointer}button:disabled{opacity:.65;cursor:wait}
+    :focus-visible{outline:3px solid #b05c1c;outline-offset:4px}.result{border-top:1px solid #bbc7bf;margin-top:24px;padding-top:20px}
+    dl{display:grid;grid-template-columns:140px 1fr;gap:8px;margin:16px 0}dt{color:#40594d}dd{margin:0;overflow-wrap:anywhere}
+    .route{font-size:1.7rem;font-weight:650;text-transform:capitalize}footer{margin-top:48px;padding-top:20px;border-top:1px solid #bbc7bf;font-size:.9rem;color:#40594d}#error{color:#8b281d}
+    #refresh{font:inherit;min-height:44px;padding:10px 14px;border:1px solid #728d7e;border-radius:5px;background:white;color:inherit;cursor:pointer}
+    @media(max-width:680px){main{padding:24px 18px}header{display:block}.pill{display:inline-block;margin-top:8px}.workspace{grid-template-columns:1fr;gap:24px}.samples{grid-template-columns:1fr 1fr}.sample span{display:none}dl{grid-template-columns:120px 1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <header><div><div class="eyebrow">Cutback / independent example</div><h1>A ticket comes in.<br>Where does it go?</h1><p>One Python SDK call. Route a synthetic ticket, then see its metadata in Cutback.</p></div><span class="pill">Local simulation · no model API calls</span></header>
+  <p class="notice">Local fixture responses and fixed token counts demonstrate the pipeline. They do not measure real model quality or spend.</p>
+  <div class="workspace">
+    <aside aria-labelledby="sample-heading"><h2 id="sample-heading">Start with a synthetic ticket</h2><div class="samples">
+      <button class="sample" type="button" data-ticket="I was charged twice for my subscription."><strong>Duplicate charge</strong><span>Send to the billing queue</span></button>
+      <button class="sample" type="button" data-ticket="I cannot sign into my account."><strong>Account access</strong><span>Send to the access queue</span></button>
+      <button class="sample" type="button" data-ticket="The service is down and requests return 502."><strong>Service outage</strong><span>Send to the incident queue</span></button>
+      <button class="sample" type="button" data-ticket="My invoice is incorrect. [usage unavailable]"><strong>Missing usage</strong><span>Keep token counts unknown</span></button>
+    </div></aside>
+    <section aria-labelledby="work-heading"><h2 id="work-heading">Route a ticket</h2>
+      <form id="ticket-form"><label for="ticket">Ticket text</label><textarea id="ticket" name="ticket" maxlength="4000" required>I was charged twice for my subscription.</textarea><button type="submit" id="submit">Route with local fixture</button></form>
+      <p id="error" role="alert" hidden></p>
+      <div id="result" class="result" role="status" aria-live="polite"><p>Choose a ticket and route it to see the result.</p></div>
+    </section>
+  </div>
+  <section style="margin-top:36px;border-top:1px solid #bbc7bf;padding-top:24px" aria-labelledby="observation-heading"><h2 id="observation-heading">What reached Cutback?</h2><p id="collector-status" role="status">Checking the local collector…</p><dl id="collector-summary" hidden></dl><button type="button" id="refresh">Refresh collector report</button><p>These are actual collected simulation totals. Fixture token counts and catalog rates are demonstration evidence; no model invoice or quality result is verified.</p></section>
+  <footer><p id="connection" role="status">Checking observation status…</p><p>Follow README.md to connect a collector or inspect the full report. Credentials remain on the local server.</p></footer>
+</main>
+<script>
+const ticket = document.querySelector('#ticket');
+const result = document.querySelector('#result');
+const error = document.querySelector('#error');
+const submit = document.querySelector('#submit');
+document.querySelectorAll('[data-ticket]').forEach(button => button.addEventListener('click', () => { ticket.value = button.dataset.ticket; ticket.focus(); }));
+function value(tag, text, className) { const node = document.createElement(tag); node.textContent = text; if (className) node.className = className; return node; }
+document.querySelector('#ticket-form').addEventListener('submit', async event => {
+  event.preventDefault(); submit.disabled = true; error.hidden = true;
+  try {
+    const response = await fetch('/api/route', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text:ticket.value}) });
+    if (!response.ok) throw new Error('The ticket could not be routed. Check the application terminal and try again.');
+    const data = await response.json();
+    result.replaceChildren(value('div', data.route + ' queue', 'route'));
+    const details = document.createElement('dl');
+    for (const [label, text] of [['Requested model', data.model], ['Input tokens', data.input_tokens ?? 'Unknown'], ['Output tokens', data.output_tokens ?? 'Unknown'], ['Usage source', data.usage_origin === 'local_fixture' ? 'Fixed local fixture' : 'Not reported'], ['Model API calls', 'None — local transport only']]) details.append(value('dt',label),value('dd',String(text)));
+    result.append(details);
+    setTimeout(refreshObservation, 350);
+  } catch (failure) { error.textContent = failure.message; error.hidden = false; }
+  finally { submit.disabled = false; }
+});
+fetch('/api/health').then(response => { if (!response.ok) throw new Error(); return response.json(); }).then(data => { document.querySelector('#connection').textContent = data.cutback_enabled ? 'Cutback observation enabled · metadata only. Check the collector for delivery status.' : 'Cutback observation is off. The local application is ready.'; }).catch(() => { document.querySelector('#connection').textContent = 'Application status unavailable. Check the application terminal.'; });
+let refreshing = false;
+async function refreshObservation() {
+  if (refreshing) return;
+  refreshing = true;
+  const status = document.querySelector('#collector-status');
+  const summary = document.querySelector('#collector-summary');
+  try {
+    const response = await fetch('/api/observation');
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    summary.replaceChildren(); summary.hidden = data.status !== 'available';
+    if (data.status !== 'available') { status.textContent = data.status === 'not_connected' ? 'Observation is off. Follow step 3 in README.md to connect a local collector.' : 'Collector report unavailable. Check the collector and scoped key expiry.'; return; }
+    status.textContent = 'Read from the local PostgreSQL-backed collector · simulation traffic only.';
+    for (const [label, text] of [['Collected calls', String(data.observed_requests)], ['Missing usage', String(data.missing_usage_count)], ['Known modeled subtotal', data.known_modeled_cost_subtotal_usd == null ? 'Unknown' : '$' + data.known_modeled_cost_subtotal_usd], ['Complete modeled cost', data.modeled_cost_usd == null ? 'Unknown' : '$' + data.modeled_cost_usd]]) summary.append(value('dt',label),value('dd',text));
+  } catch { summary.hidden = true; status.textContent = 'Collector report unavailable. Check the local collector.'; }
+  finally { refreshing = false; }
+}
+document.querySelector('#refresh').addEventListener('click', refreshObservation);
+refreshObservation();
+</script>
+</body>
+</html>
