@@ -5,7 +5,12 @@ from pathlib import Path
 
 import pytest
 
-from example_supportdesk.optimize_demo import INPUTS, choose_candidate, fixture_key, verify_inputs
+from example_supportdesk.optimize_demo import (
+    INPUTS,
+    choose_candidate,
+    fixture_environment,
+    verify_inputs,
+)
 
 
 def test_only_the_exact_public_fixture_inputs_are_permitted(tmp_path):
@@ -53,6 +58,9 @@ def test_fixture_executor_key_replaces_and_restores_shell_key(monkeypatch):
     import os
 
     monkeypatch.setenv("CUTBACK_EXPERIMENT_OPENAI_KEY", "owned-test-sentinel")
-    with fixture_key():
+    monkeypatch.setenv("CUTBACK_ALLOW_PAYLOADS", "false")
+    with fixture_environment():
         assert os.environ["CUTBACK_EXPERIMENT_OPENAI_KEY"] == "synthetic-fixture-only"
+        assert os.environ["CUTBACK_ALLOW_PAYLOADS"] == "true"
     assert os.environ["CUTBACK_EXPERIMENT_OPENAI_KEY"] == "owned-test-sentinel"
+    assert os.environ["CUTBACK_ALLOW_PAYLOADS"] == "false"

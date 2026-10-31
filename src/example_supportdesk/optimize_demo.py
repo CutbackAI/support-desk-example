@@ -54,11 +54,14 @@ def choose_candidate(results):
 
 
 @contextmanager
-def fixture_key():
+def fixture_environment():
     # Even if the shell has a real key, this executor receives only a fake key.
     name = "CUTBACK_EXPERIMENT_OPENAI_KEY"
     prior = os.environ.get(name)
+    payload_name = "CUTBACK_ALLOW_PAYLOADS"
+    prior_payloads = os.environ.get(payload_name)
     os.environ[name] = "synthetic-fixture-only"
+    os.environ[payload_name] = "true"
     try:
         yield
     finally:
@@ -66,6 +69,10 @@ def fixture_key():
             os.environ.pop(name, None)
         else:
             os.environ[name] = prior
+        if prior_payloads is None:
+            os.environ.pop(payload_name, None)
+        else:
+            os.environ[payload_name] = prior_payloads
 
 
 def ticket_workflow(inventory):
@@ -84,6 +91,7 @@ def ticket_workflow(inventory):
 
 
 def execute_saved(root, control):
+    verify_inputs(root)
     import httpx
     from cutback.agent import advance, load_session
     from cutback.evals.artifacts import EncryptedFileStore
@@ -120,6 +128,8 @@ def execute_saved(root, control):
         # In particular, never re-execute crashed, running, failed or blocked work.
         raise ValueError("EXAMPLE_RUN_NOT_QUEUED_INSPECT_SAVED_EVIDENCE")
     location, configuration = configured(root)
+    if configuration["allow_payloads"] is not True:
+        raise ValueError("EXAMPLE_OWNED_ENCRYPTED_FIXTURE_STORE_REQUIRED")
     app = create_app(
         database_url=database_url(location, configuration),
         admin_token=configuration["admin"],
@@ -144,7 +154,7 @@ def execute_saved(root, control):
             return native.execute(model, text, timeout_seconds)
 
     try:
-        with fixture_key():
+        with fixture_environment():
             native = OpenAIExecutor(
                 http_client=httpx.Client(
                     transport=httpx.MockTransport(closed_transport), trust_env=False
