@@ -28,10 +28,25 @@ try {
     } else {
       await page.getByText('Observation is off. Follow step 3', {exact:false}).waitFor();
     }
+    await page.getByRole('button', {name:'Refresh improvement result'}).click();
+    if (process.env.EXAMPLE_OPTIMIZATION === 'true') {
+      await page.getByText('Separate confirmation passed · local fixture evidence only.', {exact:true}).waitFor();
+      const candidates = page.locator('#optimization-candidates');
+      if (await candidates.locator('tr').count() !== 5) throw new Error('Missing evaluated alternatives');
+      if (await candidates.getByText('Quality gate failed', {exact:true}).count() !== 2) throw new Error('Negative quality controls missing');
+      if (await candidates.getByText('Selected for confirmation', {exact:true}).count() !== 1) throw new Error('Frozen winner missing');
+      await page.getByText('Application checks passed on both source trees. Exact rollback passed. External model calls: 0.', {exact:true}).waitFor();
+      if ((await page.request.post(new URL('/api/optimization', endpoint).href, {data:{run:true}})).status() !== 405) throw new Error('Browser result must be read-only');
+    } else {
+      await page.getByText('No completed lesson yet. Follow OPTIMIZATION.md to run it locally.', {exact:true}).waitFor();
+    }
     if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) throw new Error('Horizontal overflow');
     const results = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
-    if (results.violations.length || errors.length) throw new Error('Browser/accessibility check failed');
-    evidence.push({viewport, flows:2, axe_violations:0, browser_errors:0});
+    if (results.violations.length || errors.length) {
+      console.error(JSON.stringify({accessibility:results.violations.map(item => ({id:item.id,nodes:item.nodes.length})),browser_errors:errors.length}));
+      throw new Error('Browser/accessibility check failed');
+    }
+    evidence.push({viewport, flows:3, optimization:process.env.EXAMPLE_OPTIMIZATION === 'true', axe_violations:0, browser_errors:0});
     await context.close();
   }
   console.log(JSON.stringify({status:'passed', evidence, screenshots:false, video:false, traces:false}));

@@ -20,7 +20,8 @@
     :focus-visible{outline:3px solid #b05c1c;outline-offset:4px}.result{border-top:1px solid #bbc7bf;margin-top:24px;padding-top:20px}
     dl{display:grid;grid-template-columns:140px 1fr;gap:8px;margin:16px 0}dt{color:#40594d}dd{margin:0;overflow-wrap:anywhere}
     .route{font-size:1.7rem;font-weight:650;text-transform:capitalize}footer{margin-top:48px;padding-top:20px;border-top:1px solid #bbc7bf;font-size:.9rem;color:#40594d}#error{color:#8b281d}
-    #refresh{font:inherit;min-height:44px;padding:10px 14px;border:1px solid #728d7e;border-radius:5px;background:white;color:inherit;cursor:pointer}
+    #refresh,#refresh-optimization{font:inherit;min-height:44px;padding:10px 14px;border:1px solid #728d7e;border-radius:5px;background:white;color:inherit;cursor:pointer}
+    .table-scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}caption{text-align:left;margin:12px 0;font-weight:600}th,td{text-align:left;padding:10px;border-bottom:1px solid #bbc7bf}th{vertical-align:bottom}code{overflow-wrap:anywhere}
     @media(max-width:680px){main{padding:24px 18px}header{display:block}.pill{display:inline-block;margin-top:8px}.workspace{grid-template-columns:1fr;gap:24px}.samples{grid-template-columns:1fr 1fr}.sample span{display:none}dl{grid-template-columns:120px 1fr}}
   </style>
 </head>
@@ -42,6 +43,7 @@
     </section>
   </div>
   <section style="margin-top:36px;border-top:1px solid #bbc7bf;padding-top:24px" aria-labelledby="observation-heading"><h2 id="observation-heading">What reached Cutback?</h2><p id="collector-status" role="status">Checking the local collector…</p><dl id="collector-summary" hidden></dl><button type="button" id="refresh">Refresh collector report</button><p>These are actual collected simulation totals. Fixture token counts and catalog rates are demonstration evidence; no model invoice or quality result is verified.</p></section>
+  <section style="margin-top:36px;border-top:1px solid #bbc7bf;padding-top:24px" aria-labelledby="optimization-heading"><h2 id="optimization-heading">Can a cheaper change pass the checks?</h2><p>Search alternatives, confirm one on unused test groups, then run the application's checks on the original and proposed source. The lesson keeps every model response local.</p><p>Run the command in OPTIMIZATION.md, then refresh here. The browser can only read its saved result.</p><button type="button" id="refresh-optimization">Refresh improvement result</button><p id="optimization-status" role="status">Checking for a completed local lesson…</p><div id="optimization-result" hidden><div class="table-scroll" role="region" aria-label="Validation alternatives" tabindex="0"><table><caption>Validation alternatives · scripted model behavior and token counts</caption><thead><tr><th scope="col">Model</th><th scope="col">Output cap</th><th scope="col">Quality gate</th><th scope="col">Modeled difference</th><th scope="col">Decision</th></tr></thead><tbody id="optimization-candidates"></tbody></table></div><p id="optimization-checks"></p><p>The original source stays unchanged. Review the candidate in <code>.cutback/example-optimization/proposed</code>. This saved local receipt does not verify real model quality, customer savings or an invoice.</p></div></section>
   <footer><p id="connection" role="status">Checking observation status…</p><p>Follow README.md to connect a collector or inspect the full report. Credentials remain on the local server.</p></footer>
 </main>
 <script>
@@ -85,6 +87,31 @@ async function refreshObservation() {
 }
 document.querySelector('#refresh').addEventListener('click', refreshObservation);
 refreshObservation();
+async function refreshOptimization() {
+  const status = document.querySelector('#optimization-status');
+  const box = document.querySelector('#optimization-result');
+  const rows = document.querySelector('#optimization-candidates');
+  const button = document.querySelector('#refresh-optimization');
+  button.disabled = true;
+  try {
+    const response = await fetch('/api/optimization');
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    rows.replaceChildren(); box.hidden = data.status !== 'available';
+    if (data.status !== 'available') { status.textContent = data.status === 'not_run' ? 'No completed lesson yet. Follow OPTIMIZATION.md to run it locally.' : 'Saved result unavailable or source changed. Inspect the local lesson state.'; return; }
+    status.textContent = 'Separate confirmation passed · local fixture evidence only.';
+    for (const candidate of data.candidates) {
+      const row = document.createElement('tr');
+      const decision = candidate.candidate === data.winner ? 'Selected for confirmation' : !candidate.quality_gate_passed ? 'Quality gate failed' : !candidate.cheaper_on_sample ? 'No modeled cost reduction' : 'Qualified alternative';
+      for (const text of [candidate.model, String(candidate.max_output_tokens), candidate.quality_gate_passed ? 'Passed' : 'Failed', '$' + candidate.sample_modeled_cost_difference_usd, decision]) row.append(value('td',text));
+      rows.append(row);
+    }
+    document.querySelector('#optimization-checks').textContent = 'Application checks passed on both source trees. Exact rollback passed. External model calls: 0.';
+  } catch { box.hidden = true; status.textContent = 'Saved result unavailable. Check the local application.'; }
+  finally { button.disabled = false; }
+}
+document.querySelector('#refresh-optimization').addEventListener('click', refreshOptimization);
+refreshOptimization();
 </script>
 </body>
 </html>

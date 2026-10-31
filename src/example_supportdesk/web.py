@@ -65,3 +65,10 @@ def route(ticket: Ticket):
 @app.get("/api/observation")
 def observation():
     return observability.collected_summary()
+
+
+@app.get("/api/optimization")
+def optimization():
+    from .optimization_view import summary
+
+    return summary(Path.cwd())

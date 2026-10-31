@@ -253,7 +253,7 @@ wheels = [
 [[package]]
 name = "cutback"
 version = "0.1.0.dev5"
-source = { git = "https://github.com/CutbackAI/cutback.git?rev=2820899cd0bcc6a30ad86610a0d277da4a83bc03#2820899cd0bcc6a30ad86610a0d277da4a83bc03" }
+source = { git = "https://github.com/CutbackAI/cutback.git?rev=98a212047015b411143f0d1e0a782232a1aea2f6#98a212047015b411143f0d1e0a782232a1aea2f6" }
 dependencies = [
     { name = "pathspec" },
     { name = "pydantic" },
@@ -302,7 +302,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "cutback", extras = ["server", "openai"], marker = "extra == 'cutback'", git = "https://github.com/CutbackAI/cutback.git?rev=2820899cd0bcc6a30ad86610a0d277da4a83bc03" },
+    { name = "cutback", extras = ["server", "openai"], marker = "extra == 'cutback'", git = "https://github.com/CutbackAI/cutback.git?rev=98a212047015b411143f0d1e0a782232a1aea2f6" },
     { name = "fastapi", specifier = "==0.162.0" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "openai", specifier = "==2.29.0" },

@@ -43,6 +43,7 @@ jobs:
       - run: uv run --locked --extra cutback python scripts/check_collector.py
         env:
           EXAMPLE_CHECK_BROWSER: 'true'
+      - run: uv run --locked --extra cutback python scripts/check_optimization.py
       - name: Stop this example's owned collector
         if: always()
         run: uv run --locked --extra cutback python -m example_supportdesk.local down

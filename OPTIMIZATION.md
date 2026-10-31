@@ -19,7 +19,8 @@ uv run --extra cutback python -m example_supportdesk.optimize_demo run
 
 The optional Cutback source pin must include the native fixture execution
 contract. The command refuses an older installed version before starting the
-collector. The feature and dependency pin are under qualification.
+collector. The dependency uses an exact unreleased public source commit; it is
+separate from the PyPI build. Final cross-platform qualification is in progress.
 
 The command performs these steps:
 
@@ -53,6 +54,14 @@ The command performs these steps:
    source is unchanged. No patch is accepted or deployed automatically.
 
 Inspect the result:
+
+Start the application with `uv run support-desk` and open
+**http://127.0.0.1:8010**. In **Can a cheaper change pass the checks?**, select
+**Refresh improvement result**. The table shows every evaluated alternative,
+failed quality controls, modeled differences and the one confirmed candidate.
+The browser only reads the saved lesson result; it cannot execute or apply a
+change. The application works with observation off, so displaying this result
+does not require credentials in the browser.
 
 ```sh
 uv run --extra cutback python -m example_supportdesk.optimize_demo report
