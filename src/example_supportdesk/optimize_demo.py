@@ -68,6 +68,21 @@ def fixture_key():
             os.environ[name] = prior
 
 
+def ticket_workflow(inventory):
+    from cutback.core.inventory import workflow_identity
+
+    workflows = {
+        workflow_identity(entry["file"], entry["symbol"])[0]
+        for site in inventory["call_sites"]
+        if site["source_file"] == "src/example_supportdesk/business.py"
+        for entry in site["entry_points"]
+        if entry["file"] == "src/example_supportdesk/web.py" and entry["kind"] == "http_route"
+    }
+    if len(workflows) != 1:
+        raise ValueError("EXAMPLE_REQUIRES_ONE_SCANNED_TICKET_ROUTE")
+    return workflows.pop()
+
+
 def execute_saved(root, control):
     import httpx
     from cutback.agent import advance, load_session
@@ -262,7 +277,6 @@ def optimize(root, *, port=8091):
     from cutback.agent import analyze, confirm, gate, load_session, prepare, proposal
     from cutback.agent_control import connect
     from cutback.application_checks import git, source_root
-    from cutback.core.inventory import workflow_identity
     from cutback.core.native_fixture import NATIVE_FIXTURE_CONTRACT
     from cutback.core.workspace import (
         private_directory,
@@ -271,6 +285,7 @@ def optimize(root, *, port=8091):
         write_private,
     )
     from cutback.local_stack import configured, down, status, up
+    from cutback.scanner import scan
 
     if NATIVE_FIXTURE_CONTRACT != "native-source-fixture-v1":
         raise ValueError("EXAMPLE_REQUIRES_NATIVE_FIXTURE_CAPABLE_CUTBACK")
@@ -302,10 +317,10 @@ def optimize(root, *, port=8091):
                 down(root)
         up(root, port=port, allow_payloads=True)
         control, project = connect(root, local=True)
-        workflow, _ = workflow_identity("src/example_supportdesk/web.py", "route")
+        workflow = ticket_workflow(scan(root))
         if journal["phase"] == "PREPARING":
             state = analyze(root, workflow=workflow)
-            if state["phase"] == "ANALYZED":
+            if state["phase"] in {"ANALYZED", "SOURCE_CHANGED"}:
                 state = prepare(
                     root,
                     control,
