@@ -22,7 +22,11 @@ INPUTS = {
     "src/example_supportdesk/fixture_provider.py": "deba4ac746537d409ae72d3b71cf67a132c524b870c8484320f51f716b162694",
     "fixtures/tickets.jsonl": "f96b9146f9fa14d5f852fe91464f008ef1bfdb00ed9834b1b8a455b1fe053be6",
 }
-CONTRACT = "support-desk-synthetic-optimization-v1"
+CONTRACT = "support-desk-synthetic-optimization-v2"
+# A 100% population lower confidence bound is impossible for a finite sample.
+# This toy bound is declared before execution; strict application checks still
+# require all 72 golden cases to match. It is never a customer quality policy.
+FIXTURE_MINIMUM = 0.6
 
 
 def digest(value):
@@ -341,7 +345,7 @@ def optimize(root, *, port=8091):
                     max_usd="5",
                     max_requests=1000,
                     workflow=workflow,
-                    minimum=1,
+                    minimum=FIXTURE_MINIMUM,
                     independent_labels=True,
                     representative=False,
                     min_test_samples=6,
