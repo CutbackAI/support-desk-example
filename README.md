@@ -8,9 +8,11 @@ A ticket arrives. One native OpenAI SDK call assigns it to **access**, **billing
 
 ## 1. Run the application
 
-Install Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run these commands from this repository:
+Install Python 3.11+, Git and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
 
 ```sh
+git clone https://github.com/CutbackAI/support-desk-example.git
+cd support-desk-example
 uv sync --locked
 uv run support-desk
 ```
