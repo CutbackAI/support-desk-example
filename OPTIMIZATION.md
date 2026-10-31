@@ -33,11 +33,11 @@ The command performs these steps:
    the same dataset split. Automatically freeze the supported model/output-cap
    search. The maximum modeled budget is $5/1,000 requests per stage; actual
    external model requests are zero.
-   This small lesson predeclares a 0.60 lower-confidence quality threshold for
-   the scripted classification metric. It is a teaching policy, not a production
-   acceptance target. The separate application checks require every one of the
-   72 golden cases to match exactly. A perfect observed sample cannot establish
-   a 100% population lower confidence bound.
+   Every observed label must match, with at least six cases and three independent
+   groups required per evaluation split. This is an exact sample gate, not a
+   population-quality claim. The separate application checks require every one
+   of the 72 golden cases to match exactly. A perfect observed sample cannot
+   establish a 100% population lower confidence bound.
 4. Execute the saved validation run using the native SDK and a closed
    `httpx.MockTransport`, through the ordinary PostgreSQL worker, reservations,
    evidence and quality gates. A normal live worker refuses these fixture plans.
