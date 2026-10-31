@@ -1,5 +1,8 @@
 """Application-owned behavioral checks; no external inference or collector is required."""
 
+import json
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -45,6 +48,22 @@ def test_missing_usage_stays_unknown(client):
     assert data["input_tokens"] is None
     assert data["output_tokens"] is None
     assert data["usage_origin"] == "unavailable"
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        json.loads(line)
+        for line in (Path(__file__).resolve().parents[1] / "fixtures/tickets.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ],
+    ids=lambda case: case["id"],
+)
+def test_owned_evaluation_cases_match_the_application_contract(client, case):
+    response = client.post("/api/route", json={"text": case["input"]})
+    assert response.status_code == 200
+    assert response.json()["route"] == case["gold"]
 
 
 def test_application_check_rejects_an_unsafe_token_cap(monkeypatch):

@@ -1,0 +1,72 @@
+{"id":"access-login-a","input":"I cannot sign into my account.","gold":"access","group":"owned-access-login","stratum":"access"}
+{"id":"access-login-b","input":"A teammate reports the same issue: I cannot sign into my account.","gold":"access","group":"owned-access-login","stratum":"access"}
+{"id":"access-reset-a","input":"Please reset my password.","gold":"access","group":"owned-access-reset","stratum":"access"}
+{"id":"access-reset-b","input":"A teammate reports the same issue: Please reset my password.","gold":"access","group":"owned-access-reset","stratum":"access"}
+{"id":"access-unlock-a","input":"Please unlock my account.","gold":"access","group":"owned-access-unlock","stratum":"access"}
+{"id":"access-unlock-b","input":"A teammate reports the same issue: Please unlock my account.","gold":"access","group":"owned-access-unlock","stratum":"access"}
+{"id":"access-invite-a","input":"My invitation has expired.","gold":"access","group":"owned-access-invite","stratum":"access"}
+{"id":"access-invite-b","input":"A teammate reports the same issue: My invitation has expired.","gold":"access","group":"owned-access-invite","stratum":"access"}
+{"id":"access-permission-a","input":"I need permission to view a workspace.","gold":"access","group":"owned-access-permission","stratum":"access"}
+{"id":"access-permission-b","input":"A teammate reports the same issue: I need permission to view a workspace.","gold":"access","group":"owned-access-permission","stratum":"access"}
+{"id":"access-member-a","input":"Please add a new team member.","gold":"access","group":"owned-access-member","stratum":"access"}
+{"id":"access-member-b","input":"A teammate reports the same issue: Please add a new team member.","gold":"access","group":"owned-access-member","stratum":"access"}
+{"id":"access-role-a","input":"I need to change a teammate's role.","gold":"access","group":"owned-access-role","stratum":"access"}
+{"id":"access-role-b","input":"A teammate reports the same issue: I need to change a teammate's role.","gold":"access","group":"owned-access-role","stratum":"access"}
+{"id":"access-email-a","input":"How do I change my account email?","gold":"access","group":"owned-access-email","stratum":"access"}
+{"id":"access-email-b","input":"A teammate reports the same issue: How do I change my account email?","gold":"access","group":"owned-access-email","stratum":"access"}
+{"id":"access-authentication-a","input":"I lost my authentication device.","gold":"access","group":"owned-access-authentication","stratum":"access"}
+{"id":"access-authentication-b","input":"A teammate reports the same issue: I lost my authentication device.","gold":"access","group":"owned-access-authentication","stratum":"access"}
+{"id":"access-recovery-a","input":"I need help recovering my account.","gold":"access","group":"owned-access-recovery","stratum":"access"}
+{"id":"access-recovery-b","input":"A teammate reports the same issue: I need help recovering my account.","gold":"access","group":"owned-access-recovery","stratum":"access"}
+{"id":"access-session-a","input":"Please sign out all my sessions.","gold":"access","group":"owned-access-session","stratum":"access"}
+{"id":"access-session-b","input":"A teammate reports the same issue: Please sign out all my sessions.","gold":"access","group":"owned-access-session","stratum":"access"}
+{"id":"access-username-a","input":"I forgot my username.","gold":"access","group":"owned-access-username","stratum":"access"}
+{"id":"access-username-b","input":"A teammate reports the same issue: I forgot my username.","gold":"access","group":"owned-access-username","stratum":"access"}
+{"id":"billing-duplicate-a","input":"I was charged twice for my subscription.","gold":"billing","group":"owned-billing-duplicate","stratum":"billing"}
+{"id":"billing-duplicate-b","input":"A teammate reports the same issue: I was charged twice for my subscription.","gold":"billing","group":"owned-billing-duplicate","stratum":"billing"}
+{"id":"billing-invoice-a","input":"Please send me an invoice.","gold":"billing","group":"owned-billing-invoice","stratum":"billing"}
+{"id":"billing-invoice-b","input":"A teammate reports the same issue: Please send me an invoice.","gold":"billing","group":"owned-billing-invoice","stratum":"billing"}
+{"id":"billing-refund-a","input":"I would like a refund.","gold":"billing","group":"owned-billing-refund","stratum":"billing"}
+{"id":"billing-refund-b","input":"A teammate reports the same issue: I would like a refund.","gold":"billing","group":"owned-billing-refund","stratum":"billing"}
+{"id":"billing-payment-a","input":"I need to update my payment method.","gold":"billing","group":"owned-billing-payment","stratum":"billing"}
+{"id":"billing-payment-b","input":"A teammate reports the same issue: I need to update my payment method.","gold":"billing","group":"owned-billing-payment","stratum":"billing"}
+{"id":"billing-receipt-a","input":"Please provide a receipt.","gold":"billing","group":"owned-billing-receipt","stratum":"billing"}
+{"id":"billing-receipt-b","input":"A teammate reports the same issue: Please provide a receipt.","gold":"billing","group":"owned-billing-receipt","stratum":"billing"}
+{"id":"billing-card-a","input":"My card has expired.","gold":"billing","group":"owned-billing-card","stratum":"billing"}
+{"id":"billing-card-b","input":"A teammate reports the same issue: My card has expired.","gold":"billing","group":"owned-billing-card","stratum":"billing"}
+{"id":"billing-paid-a","input":"I paid but my balance has not changed.","gold":"billing","group":"owned-billing-paid","stratum":"billing"}
+{"id":"billing-paid-b","input":"A teammate reports the same issue: I paid but my balance has not changed.","gold":"billing","group":"owned-billing-paid","stratum":"billing"}
+{"id":"billing-billing-a","input":"Please change my billing address.","gold":"billing","group":"owned-billing-billing","stratum":"billing"}
+{"id":"billing-billing-b","input":"A teammate reports the same issue: Please change my billing address.","gold":"billing","group":"owned-billing-billing","stratum":"billing"}
+{"id":"billing-charge-a","input":"What is this charge on my statement?","gold":"billing","group":"owned-billing-charge","stratum":"billing"}
+{"id":"billing-charge-b","input":"A teammate reports the same issue: What is this charge on my statement?","gold":"billing","group":"owned-billing-charge","stratum":"billing"}
+{"id":"billing-invoice-details-a","input":"The invoice total looks incorrect.","gold":"billing","group":"owned-billing-invoice-details","stratum":"billing"}
+{"id":"billing-invoice-details-b","input":"A teammate reports the same issue: The invoice total looks incorrect.","gold":"billing","group":"owned-billing-invoice-details","stratum":"billing"}
+{"id":"billing-refund-status-a","input":"Can you check the status of my refund?","gold":"billing","group":"owned-billing-refund-status","stratum":"billing"}
+{"id":"billing-refund-status-b","input":"A teammate reports the same issue: Can you check the status of my refund?","gold":"billing","group":"owned-billing-refund-status","stratum":"billing"}
+{"id":"billing-payment-date-a","input":"When is my next payment due?","gold":"billing","group":"owned-billing-payment-date","stratum":"billing"}
+{"id":"billing-payment-date-b","input":"A teammate reports the same issue: When is my next payment due?","gold":"billing","group":"owned-billing-payment-date","stratum":"billing"}
+{"id":"incident-offline-a","input":"The service is offline.","gold":"incident","group":"owned-incident-offline","stratum":"incident"}
+{"id":"incident-offline-b","input":"A teammate reports the same issue: The service is offline.","gold":"incident","group":"owned-incident-offline","stratum":"incident"}
+{"id":"incident-down-a","input":"The application is down.","gold":"incident","group":"owned-incident-down","stratum":"incident"}
+{"id":"incident-down-b","input":"A teammate reports the same issue: The application is down.","gold":"incident","group":"owned-incident-down","stratum":"incident"}
+{"id":"incident-502-a","input":"Every request returns 502.","gold":"incident","group":"owned-incident-502","stratum":"incident"}
+{"id":"incident-502-b","input":"A teammate reports the same issue: Every request returns 502.","gold":"incident","group":"owned-incident-502","stratum":"incident"}
+{"id":"incident-crash-a","input":"The service has a repeatable crash.","gold":"incident","group":"owned-incident-crash","stratum":"incident"}
+{"id":"incident-crash-b","input":"A teammate reports the same issue: The service has a repeatable crash.","gold":"incident","group":"owned-incident-crash","stratum":"incident"}
+{"id":"incident-timeout-a","input":"Requests repeatedly timeout.","gold":"incident","group":"owned-incident-timeout","stratum":"incident"}
+{"id":"incident-timeout-b","input":"A teammate reports the same issue: Requests repeatedly timeout.","gold":"incident","group":"owned-incident-timeout","stratum":"incident"}
+{"id":"incident-slow-a","input":"Every page is unusually slow.","gold":"incident","group":"owned-incident-slow","stratum":"incident"}
+{"id":"incident-slow-b","input":"A teammate reports the same issue: Every page is unusually slow.","gold":"incident","group":"owned-incident-slow","stratum":"incident"}
+{"id":"incident-error-a","input":"The application returns a server error.","gold":"incident","group":"owned-incident-error","stratum":"incident"}
+{"id":"incident-error-b","input":"A teammate reports the same issue: The application returns a server error.","gold":"incident","group":"owned-incident-error","stratum":"incident"}
+{"id":"incident-broken-a","input":"The search service is broken.","gold":"incident","group":"owned-incident-broken","stratum":"incident"}
+{"id":"incident-broken-b","input":"A teammate reports the same issue: The search service is broken.","gold":"incident","group":"owned-incident-broken","stratum":"incident"}
+{"id":"incident-unavailable-a","input":"The API is unavailable.","gold":"incident","group":"owned-incident-unavailable","stratum":"incident"}
+{"id":"incident-unavailable-b","input":"A teammate reports the same issue: The API is unavailable.","gold":"incident","group":"owned-incident-unavailable","stratum":"incident"}
+{"id":"incident-failing-a","input":"All background jobs are failing.","gold":"incident","group":"owned-incident-failing","stratum":"incident"}
+{"id":"incident-failing-b","input":"A teammate reports the same issue: All background jobs are failing.","gold":"incident","group":"owned-incident-failing","stratum":"incident"}
+{"id":"incident-outage-a","input":"We are experiencing an outage.","gold":"incident","group":"owned-incident-outage","stratum":"incident"}
+{"id":"incident-outage-b","input":"A teammate reports the same issue: We are experiencing an outage.","gold":"incident","group":"owned-incident-outage","stratum":"incident"}
+{"id":"incident-offline-region-a","input":"The service is offline across our test region.","gold":"incident","group":"owned-incident-offline-region","stratum":"incident"}
+{"id":"incident-offline-region-b","input":"A teammate reports the same issue: The service is offline across our test region.","gold":"incident","group":"owned-incident-offline-region","stratum":"incident"}

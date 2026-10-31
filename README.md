@@ -6,6 +6,10 @@ A ticket arrives. One native OpenAI SDK call assigns it to **access**, **billing
 
 **Every model response is a local fixture. No provider account, API key or paid inference is needed.** Token counts are fixed demonstration values. No result here establishes real model quality, customer savings or an invoice charge.
 
+For the next lesson, follow a real source proposal through search, independent
+confirmation, application checks on two Git trees and exact rollback in
+[the optimization walkthrough](OPTIMIZATION.md).
+
 ## 1. Run the application
 
 Install Python 3.11+, Git and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run:
